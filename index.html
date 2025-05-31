@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calcolatore Punti Partita</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="calcolatore.js" defer></script>
     <style>
         /* Stile per un tema scuro e pulito */
         body {
@@ -20,6 +21,11 @@
         }
         input[type='number'] {
             -moz-appearance: textfield;
+        }
+
+        /* NUOVA REGOLA CSS PER PREVENIRE LO ZOOM SUI PULSANTI */
+        .btn-no-zoom {
+            touch-action: manipulation;
         }
 
         /* Animazione per il totale */
@@ -51,9 +57,9 @@
                 <label for="life" class="block text-lg font-medium text-white mb-2">Punti vita a inizio turno</label>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <button onclick="updateValue('life', -1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">-</button>
+                        <button onclick="updateValue('life', -1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold btn-no-zoom">-</button>
                         <input type="number" id="life" value="40" class="bg-gray-900 text-white w-20 text-center text-lg rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                        <button onclick="updateValue('life', 1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">+</button>
+                        <button onclick="updateValue('life', 1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold btn-no-zoom">+</button>
                     </div>
                     <span id="life-points" class="text-2xl font-bold text-blue-400"></span>
                 </div>
@@ -63,9 +69,9 @@
                 <label for="cards" class="block text-lg font-medium text-white mb-2">Carte in mano a inizio turno</label>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <button onclick="updateValue('cards', -1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">-</button>
+                        <button onclick="updateValue('cards', -1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold btn-no-zoom">-</button>
                         <input type="number" id="cards" value="7" min="0" class="bg-gray-900 text-white w-20 text-center text-lg rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                        <button onclick="updateValue('cards', 1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">+</button>
+                        <button onclick="updateValue('cards', 1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold btn-no-zoom">+</button>
                     </div>
                     <span id="cards-points" class="text-2xl font-bold text-blue-400"></span>
                 </div>
@@ -77,17 +83,17 @@
                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <label for="creatures" class="text-gray-300">N. creature:</label>
                     <div class="flex items-center gap-3">
-                        <button onclick="updateValue('creatures', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <button onclick="updateValue('creatures', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">-</button>
                         <input type="number" id="creatures" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                        <button onclick="updateValue('creatures', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                        <button onclick="updateValue('creatures', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">+</button>
                     </div>
                  </div>
                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                      <label for="power" class="text-gray-300">Forza totale:</label>
                      <div class="flex items-center gap-3">
-                        <button onclick="updateValue('power', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <button onclick="updateValue('power', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">-</button>
                         <input type="number" id="power" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                        <button onclick="updateValue('power', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                        <button onclick="updateValue('power', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">+</button>
                     </div>
                  </div>
                  <div class="text-right">
@@ -98,17 +104,17 @@
                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <label for="mana-perm" class="text-gray-300">Mana da permanenti:</label>
                     <div class="flex items-center gap-3">
-                        <button onclick="updateValue('mana-perm', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <button onclick="updateValue('mana-perm', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">-</button>
                         <input type="number" id="mana-perm" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                        <button onclick="updateValue('mana-perm', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                        <button onclick="updateValue('mana-perm', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">+</button>
                     </div>
                  </div>
                  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                      <label for="mana-temp" class="text-gray-300">Mana "usa e getta":</label>
                     <div class="flex items-center gap-3">
-                        <button onclick="updateValue('mana-temp', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <button onclick="updateValue('mana-temp', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">-</button>
                         <input type="number" id="mana-temp" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
-                        <button onclick="updateValue('mana-temp', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                        <button onclick="updateValue('mana-temp', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold btn-no-zoom">+</button>
                     </div>
                  </div>
                  <div class="text-right">
@@ -156,132 +162,12 @@
                     <span class="text-2xl font-bold text-white">Totale PP:</span>
                     <span id="total-points" class="text-4xl font-extrabold text-blue-400"></span>
                 </div>
-                 <button id="reset-button" class="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                 <button id="reset-button" class="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors btn-no-zoom">
                     Reset
                 </button>
             </div>
         </main>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('input');
-            const resetButton = document.getElementById('reset-button');
-
-            // Funzione principale per calcolare tutto
-            const calculateTotal = () => {
-                let totalPP = 0;
-
-                // 1. Punti Vita
-                const life = parseInt(document.getElementById('life').value) || 0;
-                let lifePoints = 0;
-                if (life >= 60) {
-                    lifePoints = 30;
-                } else if (life > 0) {
-                    lifePoints = 30 - Math.floor((60 - life) / 2);
-                }
-                document.getElementById('life-points').textContent = `${lifePoints} PP`;
-                totalPP += lifePoints;
-
-                // 2. Carte in mano
-                const cards = parseInt(document.getElementById('cards').value) || 0;
-                let cardPoints = 0;
-                if (cards === 0) {
-                    cardPoints = 0;
-                } else if (cards >= 7) {
-                    cardPoints = 25;
-                } else {
-                    cardPoints = 25 - (7 - cards) * 3;
-                }
-                document.getElementById('cards-points').textContent = `${cardPoints} PP`;
-                totalPP += cardPoints;
-
-                // 3. Board: Creature e Forza
-                const creatures = parseInt(document.getElementById('creatures').value) || 0;
-                const power = parseInt(document.getElementById('power').value) || 0;
-                let creatureScore = 0;
-                if (creatures >= 10) {
-                    creatureScore = 20;
-                } else {
-                    creatureScore = 20 - (10 - creatures) * 2;
-                }
-                creatureScore += power;
-                document.getElementById('board-creatures-points').textContent = `${creatureScore} PP`;
-                totalPP += creatureScore;
-
-                // 4. Board: Mana (Cap 30)
-                const manaPerm = parseInt(document.getElementById('mana-perm').value) || 0;
-                const manaTemp = parseInt(document.getElementById('mana-temp').value) || 0;
-                let manaPoints = manaPerm + Math.floor(manaTemp / 2);
-                manaPoints = Math.min(manaPoints, 30); // Applica il cap
-                document.getElementById('mana-points').textContent = `${manaPoints} PP`;
-                totalPP += manaPoints;
-
-                // 5. Bonus
-                if (document.getElementById('cmdr-in-campo').checked) totalPP += 10;
-                if (document.getElementById('permanents').checked) totalPP += 10;
-                if (document.getElementById('flyer').checked) totalPP += 5;
-                if (document.getElementById('monarch').checked) totalPP += 5;
-
-                // 6. Malus
-                if (document.getElementById('voltron-lethal').checked) totalPP -= 20;
-                if (document.getElementById('poison').checked) totalPP -= 20;
-                if (document.getElementById('deck-half').checked) totalPP -= 10;
-
-                // Aggiorna totale
-                const totalEl = document.getElementById('total-points');
-                totalEl.textContent = totalPP;
-                totalEl.classList.add('total-pulse');
-                setTimeout(() => totalEl.classList.remove('total-pulse'), 500);
-            };
-
-            // Funzione per resettare il form
-            const resetForm = () => {
-                document.getElementById('life').value = 40;
-                document.getElementById('cards').value = 7;
-                document.getElementById('creatures').value = 0;
-                document.getElementById('power').value = 0;
-                document.getElementById('mana-perm').value = 0;
-                document.getElementById('mana-temp').value = 0;
-
-                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                checkboxes.forEach(cb => cb.checked = false);
-
-                calculateTotal();
-            };
-
-            // Aggiungi event listener a tutti gli input
-            inputs.forEach(input => {
-                input.addEventListener('input', calculateTotal);
-                input.addEventListener('change', calculateTotal);
-            });
-
-            resetButton.addEventListener('click', resetForm);
-
-            // Calcolo iniziale al caricamento
-            calculateTotal();
-        });
-
-        // Funzione per i pulsanti + e -
-        function updateValue(id, amount) {
-            const input = document.getElementById(id);
-            let currentValue = parseInt(input.value) || 0;
-            let newValue = currentValue + amount;
-            if (newValue < (parseInt(input.min) || 0)) {
-              newValue = (parseInt(input.min) || 0);
-            }
-            input.value = newValue;
-            // Scatena l'evento 'input' per ricalcolare il totale
-            input.dispatchEvent(new Event('input'));
-        }
-
-        // Funzione per cliccare sulla label del checkbox
-        function toggleCheckbox(id) {
-            const checkbox = document.getElementById(id);
-            checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change'));
-        }
-
-    </script>
-</body>
+    </body>
 </html>
