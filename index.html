@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Punti Partita</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Stile per un tema scuro e pulito */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Nasconde le frecce di default degli input numerici */
+        input[type='number']::-webkit-inner-spin-button,
+        input[type='number']::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type='number'] {
+            -moz-appearance: textfield;
+        }
+
+        /* Animazione per il totale */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        .total-pulse {
+            animation: pulse 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-sans">
+
+    <div class="container mx-auto max-w-lg p-4 md:p-6">
+
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white">Calcolatore punti partita</h1>
+            <p class="text-gray-400">Inserisci i dati per calcolare i PP del giocatore</p>
+        </header>
+
+        <main class="space-y-4">
+
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md">
+                <label for="life" class="block text-lg font-medium text-white mb-2">Punti vita a inizio turno</label>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateValue('life', -1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">-</button>
+                        <input type="number" id="life" value="40" class="bg-gray-900 text-white w-20 text-center text-lg rounded-md border-0 focus:ring-2 focus:ring-blue-500">
+                        <button onclick="updateValue('life', 1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">+</button>
+                    </div>
+                    <span id="life-points" class="text-2xl font-bold text-blue-400"></span>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md">
+                <label for="cards" class="block text-lg font-medium text-white mb-2">Carte in mano a inizio turno</label>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateValue('cards', -1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">-</button>
+                        <input type="number" id="cards" value="7" min="0" class="bg-gray-900 text-white w-20 text-center text-lg rounded-md border-0 focus:ring-2 focus:ring-blue-500">
+                        <button onclick="updateValue('cards', 1)" class="bg-gray-700 h-10 w-10 rounded-md text-xl font-bold">+</button>
+                    </div>
+                    <span id="cards-points" class="text-2xl font-bold text-blue-400"></span>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md space-y-4">
+                 <h3 class="text-lg font-medium text-white">Board a inizio combat</h3>
+
+                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <label for="creatures" class="text-gray-300">N. creature:</label>
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateValue('creatures', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <input type="number" id="creatures" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
+                        <button onclick="updateValue('creatures', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                    </div>
+                 </div>
+                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                     <label for="power" class="text-gray-300">Forza totale:</label>
+                     <div class="flex items-center gap-3">
+                        <button onclick="updateValue('power', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <input type="number" id="power" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
+                        <button onclick="updateValue('power', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                    </div>
+                 </div>
+                 <div class="text-right">
+                     <span id="board-creatures-points" class="text-xl font-bold text-blue-400"></span>
+                 </div>
+                 <hr class="border-gray-700">
+
+                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <label for="mana-perm" class="text-gray-300">Mana da permanenti:</label>
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateValue('mana-perm', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <input type="number" id="mana-perm" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
+                        <button onclick="updateValue('mana-perm', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                    </div>
+                 </div>
+                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                     <label for="mana-temp" class="text-gray-300">Mana "usa e getta":</label>
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateValue('mana-temp', -1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">-</button>
+                        <input type="number" id="mana-temp" value="0" min="0" class="bg-gray-900 text-white w-16 text-center text-md rounded-md border-0 focus:ring-2 focus:ring-blue-500">
+                        <button onclick="updateValue('mana-temp', 1)" class="bg-gray-700 h-8 w-8 rounded-md text-lg font-bold">+</button>
+                    </div>
+                 </div>
+                 <div class="text-right">
+                    <span class="text-xs text-gray-400">(Max 30 PP)</span>
+                    <span id="mana-points" class="text-xl font-bold text-blue-400 ml-2"></span>
+                 </div>
+            </div>
+
+            <div class="bg-gray-800 p-4 rounded-lg shadow-md space-y-3">
+                <h3 class="text-lg font-medium text-white mb-3">Bonus e malus</h3>
+
+                <div class="flex items-center justify-between" onclick="toggleCheckbox('cmdr-in-campo')">
+                    <label for="cmdr-in-campo" class="text-gray-300 cursor-pointer flex-grow">Commander in campo</label>
+                    <input type="checkbox" id="cmdr-in-campo" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500 cursor-pointer">
+                </div>
+                <div class="flex items-center justify-between" onclick="toggleCheckbox('permanents')">
+                    <label for="permanents" class="text-gray-300 cursor-pointer flex-grow">5+ permanenti non creatura/mana</label>
+                    <input type="checkbox" id="permanents" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500 cursor-pointer">
+                </div>
+                <div class="flex items-center justify-between" onclick="toggleCheckbox('flyer')">
+                    <label for="flyer" class="text-gray-300 cursor-pointer flex-grow">Almeno un volante</label>
+                    <input type="checkbox" id="flyer" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500 cursor-pointer">
+                </div>
+                <div class="flex items-center justify-between" onclick="toggleCheckbox('monarch')">
+                    <label for="monarch" class="text-gray-300 cursor-pointer flex-grow">Monarca</label>
+                    <input type="checkbox" id="monarch" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-blue-500 focus:ring-blue-500 cursor-pointer">
+                </div>
+                <hr class="border-gray-700 my-2">
+                <div class="flex items-center justify-between" onclick="toggleCheckbox('voltron-lethal')">
+                    <label for="voltron-lethal" class="text-red-400 cursor-pointer flex-grow">Sotto lethal di voltron</label>
+                    <input type="checkbox" id="voltron-lethal" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-red-500 focus:ring-red-500 cursor-pointer">
+                </div>
+                <div class="flex items-center justify-between" onclick="toggleCheckbox('poison')">
+                    <label for="poison" class="text-red-400 cursor-pointer flex-grow">7+ veleni (poison)</label>
+                    <input type="checkbox" id="poison" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-red-500 focus:ring-red-500 cursor-pointer">
+                </div>
+                 <div class="flex items-center justify-between" onclick="toggleCheckbox('deck-half')">
+                    <label for="deck-half" class="text-red-400 cursor-pointer flex-grow">Meno di metà grimorio</label>
+                    <input type="checkbox" id="deck-half" class="h-6 w-6 rounded bg-gray-700 border-gray-600 text-red-500 focus:ring-red-500 cursor-pointer">
+                </div>
+            </div>
+
+            <div class="sticky bottom-0 bg-gray-900/80 backdrop-blur-sm py-4">
+                <div class="bg-gray-800 p-4 rounded-lg flex items-center justify-between shadow-lg">
+                    <span class="text-2xl font-bold text-white">Totale PP:</span>
+                    <span id="total-points" class="text-4xl font-extrabold text-blue-400"></span>
+                </div>
+                 <button id="reset-button" class="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                    Reset
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input');
+            const resetButton = document.getElementById('reset-button');
+
+            // Funzione principale per calcolare tutto
+            const calculateTotal = () => {
+                let totalPP = 0;
+
+                // 1. Punti Vita
+                const life = parseInt(document.getElementById('life').value) || 0;
+                let lifePoints = 0;
+                if (life >= 60) {
+                    lifePoints = 30;
+                } else if (life > 0) {
+                    lifePoints = 30 - Math.floor((60 - life) / 2);
+                }
+                document.getElementById('life-points').textContent = `${lifePoints} PP`;
+                totalPP += lifePoints;
+
+                // 2. Carte in mano
+                const cards = parseInt(document.getElementById('cards').value) || 0;
+                let cardPoints = 0;
+                if (cards === 0) {
+                    cardPoints = 0;
+                } else if (cards >= 7) {
+                    cardPoints = 25;
+                } else {
+                    cardPoints = 25 - (7 - cards) * 3;
+                }
+                document.getElementById('cards-points').textContent = `${cardPoints} PP`;
+                totalPP += cardPoints;
+
+                // 3. Board: Creature e Forza
+                const creatures = parseInt(document.getElementById('creatures').value) || 0;
+                const power = parseInt(document.getElementById('power').value) || 0;
+                let creatureScore = 0;
+                if (creatures >= 10) {
+                    creatureScore = 20;
+                } else {
+                    creatureScore = 20 - (10 - creatures) * 2;
+                }
+                creatureScore += power;
+                document.getElementById('board-creatures-points').textContent = `${creatureScore} PP`;
+                totalPP += creatureScore;
+
+                // 4. Board: Mana (Cap 30)
+                const manaPerm = parseInt(document.getElementById('mana-perm').value) || 0;
+                const manaTemp = parseInt(document.getElementById('mana-temp').value) || 0;
+                let manaPoints = manaPerm + Math.floor(manaTemp / 2);
+                manaPoints = Math.min(manaPoints, 30); // Applica il cap
+                document.getElementById('mana-points').textContent = `${manaPoints} PP`;
+                totalPP += manaPoints;
+
+                // 5. Bonus
+                if (document.getElementById('cmdr-in-campo').checked) totalPP += 10;
+                if (document.getElementById('permanents').checked) totalPP += 10;
+                if (document.getElementById('flyer').checked) totalPP += 5;
+                if (document.getElementById('monarch').checked) totalPP += 5;
+
+                // 6. Malus
+                if (document.getElementById('voltron-lethal').checked) totalPP -= 20;
+                if (document.getElementById('poison').checked) totalPP -= 20;
+                if (document.getElementById('deck-half').checked) totalPP -= 10;
+
+                // Aggiorna totale
+                const totalEl = document.getElementById('total-points');
+                totalEl.textContent = totalPP;
+                totalEl.classList.add('total-pulse');
+                setTimeout(() => totalEl.classList.remove('total-pulse'), 500);
+            };
+
+            // Funzione per resettare il form
+            const resetForm = () => {
+                document.getElementById('life').value = 40;
+                document.getElementById('cards').value = 7;
+                document.getElementById('creatures').value = 0;
+                document.getElementById('power').value = 0;
+                document.getElementById('mana-perm').value = 0;
+                document.getElementById('mana-temp').value = 0;
+
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => cb.checked = false);
+
+                calculateTotal();
+            };
+
+            // Aggiungi event listener a tutti gli input
+            inputs.forEach(input => {
+                input.addEventListener('input', calculateTotal);
+                input.addEventListener('change', calculateTotal);
+            });
+
+            resetButton.addEventListener('click', resetForm);
+
+            // Calcolo iniziale al caricamento
+            calculateTotal();
+        });
+
+        // Funzione per i pulsanti + e -
+        function updateValue(id, amount) {
+            const input = document.getElementById(id);
+            let currentValue = parseInt(input.value) || 0;
+            let newValue = currentValue + amount;
+            if (newValue < (parseInt(input.min) || 0)) {
+              newValue = (parseInt(input.min) || 0);
+            }
+            input.value = newValue;
+            // Scatena l'evento 'input' per ricalcolare il totale
+            input.dispatchEvent(new Event('input'));
+        }
+
+        // Funzione per cliccare sulla label del checkbox
+        function toggleCheckbox(id) {
+            const checkbox = document.getElementById(id);
+            checkbox.checked = !checkbox.checked;
+            checkbox.dispatchEvent(new Event('change'));
+        }
+
+    </script>
+</body>
+</html>
